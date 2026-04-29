@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProductAPIResponse",
+  "description": "Response from the /products/{product_id} endpoint",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "Unique identifier for the product"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the product"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly identifier"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full product description (may contain HTML)"
+    },
+    "short_description": {
+      "type": ["string", "null"],
+      "description": "Brief summary shown in listings"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "draft", "archived"],
+      "description": "Publication status of the product"
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "brand_id": { "type": "string" },
+        "name":     { "type": "string" },
+        "logo_url": { "type": ["string", "null"] }
+      },
+      "required": ["brand_id", "name"]
+    },
+    "categories": {
+      "type": "array",
+      "description": "Category hierarchy the product belongs to",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category_id": { "type": "string" },
+          "name":        { "type": "string" },
+          "slug":        { "type": "string" }
+        },
+        "required": ["category_id", "name", "slug"]
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "base_price":  { "type": "number" },
+        "sale_price":  { "type": ["number", "null"] },
+        "currency":    { "type": "string" },
+        "on_sale":     { "type": "boolean" },
+        "tax_class":   { "type": "string" }
+      },
+      "required": ["base_price", "currency", "on_sale"]
+    },
+    "inventory": {
+      "type": "object",
+      "properties": {
+        "sku":             { "type": "string" },
+        "track_quantity":  { "type": "boolean" },
+        "quantity":        { "type": ["integer", "null"] },
+        "in_stock":        { "type": "boolean" },
+        "backorder_allowed": { "type": "boolean" }
+      },
+      "required": ["sku", "in_stock"]
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "image_id":  { "type": "string" },
+          "url":       { "type": "string" },
+          "alt":       { "type": ["string", "null"] },
+          "is_primary": { "type": "boolean" },
+          "position":  { "type": "integer" }
+        },
+        "required": ["image_id", "url", "is_primary", "position"]
+      }
+    },
+    "attributes": {
+      "type": "array",
+      "description": "Key/value product attributes (color, size, material, etc.)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name":  { "type": "string" },
+          "value": { "type": "string" }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "seo": {
+      "type": "object",
+      "properties": {
+        "meta_title":       { "type": ["string", "null"] },
+        "meta_description": { "type": ["string", "null"] },
+        "canonical_url":    { "type": ["string", "null"] }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["product_id", "name", "slug", "description", "status", "brand", "categories", "pricing", "inventory", "images", "created_at", "updated_at"]
+}

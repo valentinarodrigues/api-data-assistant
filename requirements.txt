@@ -1,0 +1,12 @@
+fastapi>=0.111.0
+python-dotenv>=1.0.0
+uvicorn>=0.29.0
+httpx>=0.27.0
+pyyaml>=6.0.1
+
+# CLI tool only:
+requests>=2.31.0
+
+# Optional — data dictionary supplements (CSV auto-supported, no extra dep):
+openpyxl>=3.1.0     # for .xlsx / .xls
+pdfplumber>=0.10.0  # for .pdf

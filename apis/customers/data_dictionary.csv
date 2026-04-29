@@ -1,0 +1,32 @@
+field_path,display_name,description,data_type,example,required,notes
+customer_id,Customer ID,Unique identifier for the customer,string,CUST-00456,Yes,
+email,Email,Primary email address of the customer,string,jane.doe@example.com,Yes,
+email_verified,Email Verified,Whether the customer has verified their email,boolean,true,Yes,
+name.first,First Name,Customer's first name,string,Jane,Yes,
+name.last,Last Name,Customer's last name,string,Doe,Yes,
+name.display,Display Name,Full name as displayed in the UI,string,Jane Doe,Yes,Typically first + last
+phone,Phone,Primary phone number,string,+14155552671,No,E.164 format; null if not provided
+status,Account Status,Current status of the customer account,string,active,Yes,"One of: active, inactive, suspended"
+loyalty.tier,Loyalty Tier,Customer's loyalty programme tier,string,gold,Yes,"One of: bronze, silver, gold, platinum"
+loyalty.points_balance,Points Balance,Current redeemable loyalty points,integer,4250,Yes,
+loyalty.lifetime_spend,Lifetime Spend,Total amount spent across all orders,number,3847.50,Yes,In the customer's preferred currency
+loyalty.member_since,Member Since,Date the customer joined the loyalty programme,date,2022-03-15,Yes,ISO 8601 date
+addresses[].address_id,Address ID,Unique identifier for the saved address,string,ADDR-789,Yes,
+addresses[].label,Address Label,Customer-defined label for this address,string,Home,No,"e.g. Home, Work, Other"
+addresses[].is_default,Is Default,Whether this is the customer's default shipping address,boolean,true,Yes,Exactly one address will be default
+addresses[].line1,Address Line 1,Primary street address,string,456 Oak Avenue,Yes,
+addresses[].line2,Address Line 2,Secondary address line,string,Suite 200,No,Null if not provided
+addresses[].city,City,City of the address,string,San Francisco,Yes,
+addresses[].state,State,State or province code,string,CA,Yes,ISO 3166-2 subdivision
+addresses[].postal_code,Postal Code,ZIP or postal code,string,94102,Yes,
+addresses[].country,Country,Country code,string,US,Yes,ISO 3166-1 alpha-2
+preferences.marketing_emails,Marketing Emails,Whether the customer has opted in to marketing emails,boolean,true,Yes,
+preferences.sms_notifications,SMS Notifications,Whether the customer has opted in to SMS alerts,boolean,false,Yes,
+preferences.language,Language,Preferred language code,string,en-US,Yes,BCP 47 language tag
+preferences.currency,Currency,Preferred display currency,string,USD,Yes,ISO 4217
+stats.total_orders,Total Orders,Number of orders placed by the customer,integer,17,Yes,
+stats.total_spend,Total Spend,Cumulative spend across all completed orders,number,3847.50,Yes,
+stats.average_order_value,Average Order Value,Mean order value,number,226.32,Yes,
+stats.last_order_at,Last Order At,Timestamp of the most recent order,datetime,2024-04-01T18:22:00Z,No,Null if no orders placed yet
+created_at,Created At,Timestamp when the customer account was created,datetime,2022-03-15T10:00:00Z,Yes,ISO 8601 (UTC)
+updated_at,Updated At,Timestamp of the most recent account update,datetime,2024-04-01T18:22:00Z,Yes,ISO 8601 (UTC)

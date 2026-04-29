@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: Customers API
+  version: 1.0.0
+  description: Retrieve customer profile data including loyalty status, saved addresses, preferences, and aggregate stats.
+
+paths:
+  /customers/{customer_id}:
+    get:
+      summary: Get a single customer profile
+      parameters:
+        - name: customer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+
+components:
+  schemas:
+    Customer:
+      type: object
+      required: [customer_id, email, email_verified, name, status, loyalty, addresses, preferences, stats, created_at, updated_at]
+      properties:
+        customer_id:
+          type: string
+          description: Unique identifier for the customer.
+          example: CUST-00456
+        email:
+          type: string
+          format: email
+          description: Primary email address of the customer.
+          example: jane.doe@example.com
+        email_verified:
+          type: boolean
+          description: Whether the customer has verified their email address.
+          example: true
+        name:
+          $ref: "#/components/schemas/Name"
+        phone:
+          type: string
+          nullable: true
+          description: Primary phone number in E.164 format. Null if not provided.
+          example: "+14155552671"
+        status:
+          type: string
+          enum: [active, inactive, suspended]
+          description: Current status of the customer account.
+          example: active
+        loyalty:
+          $ref: "#/components/schemas/Loyalty"
+        addresses:
+          type: array
+          description: Saved shipping addresses for the customer.
+          items:
+            $ref: "#/components/schemas/Address"
+        preferences:
+          $ref: "#/components/schemas/Preferences"
+        stats:
+          $ref: "#/components/schemas/Stats"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the customer account was created (ISO 8601, UTC).
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent account update (ISO 8601, UTC).
+
+    Name:
+      type: object
+      required: [first, last, display]
+      properties:
+        first:
+          type: string
+          description: Customer's first name.
+          example: Jane
+        last:
+          type: string
+          description: Customer's last name.
+          example: Doe
+        display:
+          type: string
+          description: Full name as displayed in the UI (typically first + last).
+          example: Jane Doe
+
+    Loyalty:
+      type: object
+      required: [tier, points_balance, lifetime_spend, member_since]
+      properties:
+        tier:
+          type: string
+          enum: [bronze, silver, gold, platinum]
+          description: Customer's current loyalty programme tier.
+          example: gold
+        points_balance:
+          type: integer
+          description: Current balance of redeemable loyalty points.
+          example: 4250
+        lifetime_spend:
+          type: number
+          description: Total amount spent across all completed orders, in the customer's preferred currency.
+          example: 3847.50
+        member_since:
+          type: string
+          format: date
+          description: Date the customer joined the loyalty programme (ISO 8601).
+          example: "2022-03-15"
+
+    Address:
+      type: object
+      required: [address_id, is_default, line1, city, state, postal_code, country]
+      properties:
+        address_id:
+          type: string
+          description: Unique identifier for the saved address.
+          example: ADDR-789
+        label:
+          type: string
+          description: Customer-defined label for this address (e.g. Home, Work).
+          example: Home
+        is_default:
+          type: boolean
+          description: Whether this is the customer's default shipping address. Exactly one address will be true.
+          example: true
+        line1:
+          type: string
+          description: Primary street address.
+          example: 456 Oak Avenue
+        line2:
+          type: string
+          nullable: true
+          description: Secondary address line (apartment, suite, etc.). Null if not provided.
+          example: Suite 200
+        city:
+          type: string
+          description: City of the address.
+          example: San Francisco
+        state:
+          type: string
+          description: State or province code (ISO 3166-2).
+          example: CA
+        postal_code:
+          type: string
+          description: ZIP or postal code.
+          example: "94102"
+        country:
+          type: string
+          description: Country code (ISO 3166-1 alpha-2).
+          example: US
+
+    Preferences:
+      type: object
+      required: [marketing_emails, sms_notifications, language, currency]
+      properties:
+        marketing_emails:
+          type: boolean
+          description: Whether the customer has opted in to marketing emails.
+          example: true
+        sms_notifications:
+          type: boolean
+          description: Whether the customer has opted in to SMS order alerts.
+          example: false
+        language:
+          type: string
+          description: Preferred language code (BCP 47).
+          example: en-US
+        currency:
+          type: string
+          description: Preferred display currency (ISO 4217).
+          example: USD
+
+    Stats:
+      type: object
+      required: [total_orders, total_spend, average_order_value]
+      properties:
+        total_orders:
+          type: integer
+          description: Total number of orders placed by the customer.
+          example: 17
+        total_spend:
+          type: number
+          description: Cumulative spend across all completed orders.
+          example: 3847.50
+        average_order_value:
+          type: number
+          description: Mean value per order.
+          example: 226.32
+        last_order_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp of the customer's most recent order. Null if no orders placed yet.
+          example: "2024-04-01T18:22:00Z"

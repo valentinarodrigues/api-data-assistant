@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Products API
+  version: 1.0.0
+  description: Retrieve product catalog data including pricing, inventory, images, and attributes.
+
+paths:
+  /products/{product_id}:
+    get:
+      summary: Get a single product
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+components:
+  schemas:
+    Product:
+      type: object
+      required: [product_id, name, slug, description, status, brand, categories, pricing, inventory, images, created_at, updated_at]
+      properties:
+        product_id:
+          type: string
+          description: Unique identifier for the product.
+          example: PROD-00789
+        name:
+          type: string
+          description: Display name shown to customers.
+          example: Wireless Noise-Cancelling Headphones
+        slug:
+          type: string
+          description: URL-friendly identifier used in product page URLs.
+          example: wireless-noise-cancelling-headphones
+        description:
+          type: string
+          description: Full product description. May contain HTML markup.
+        short_description:
+          type: string
+          nullable: true
+          description: Brief plain-text summary shown in product listings. Null if not set.
+          example: Premium ANC headphones with 30hr battery
+        status:
+          type: string
+          enum: [active, draft, archived]
+          description: Publication status of the product.
+          example: active
+        brand:
+          $ref: "#/components/schemas/Brand"
+        categories:
+          type: array
+          description: Category hierarchy the product belongs to.
+          items:
+            $ref: "#/components/schemas/Category"
+        pricing:
+          $ref: "#/components/schemas/Pricing"
+        inventory:
+          $ref: "#/components/schemas/Inventory"
+        images:
+          type: array
+          description: Ordered list of product images.
+          items:
+            $ref: "#/components/schemas/Image"
+        attributes:
+          type: array
+          description: Key/value product attributes such as color, size, and material.
+          items:
+            $ref: "#/components/schemas/Attribute"
+        tags:
+          type: array
+          description: Searchable tags. May be an empty array.
+          items:
+            type: string
+          example: [wireless, bluetooth, anc]
+        seo:
+          $ref: "#/components/schemas/SEO"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the product was created (ISO 8601, UTC).
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent update (ISO 8601, UTC).
+
+    Brand:
+      type: object
+      required: [brand_id, name]
+      properties:
+        brand_id:
+          type: string
+          description: Unique identifier for the brand.
+          example: BRAND-12
+        name:
+          type: string
+          description: Display name of the brand.
+          example: SoundMax
+        logo_url:
+          type: string
+          nullable: true
+          description: URL to the brand's logo image. Null if no logo is on file.
+
+    Category:
+      type: object
+      required: [category_id, name, slug]
+      properties:
+        category_id:
+          type: string
+          description: Unique identifier for the category.
+          example: CAT-55
+        name:
+          type: string
+          description: Display name of the category.
+          example: Headphones
+        slug:
+          type: string
+          description: URL slug for the category.
+          example: headphones
+
+    Pricing:
+      type: object
+      required: [base_price, currency, on_sale]
+      properties:
+        base_price:
+          type: number
+          description: Original price before any sale discount, in the listed currency.
+          example: 149.99
+        sale_price:
+          type: number
+          nullable: true
+          description: Discounted price when the product is on sale. Null if not on sale.
+          example: 99.99
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD
+        on_sale:
+          type: boolean
+          description: Whether the product is currently discounted.
+          example: true
+        tax_class:
+          type: string
+          description: Tax classification applied to this product (e.g. standard, reduced, exempt).
+          example: standard
+
+    Inventory:
+      type: object
+      required: [sku, in_stock]
+      properties:
+        sku:
+          type: string
+          description: Stock Keeping Unit code.
+          example: WH-BLK-001
+        track_quantity:
+          type: boolean
+          description: Whether inventory quantity is being actively tracked.
+          example: true
+        quantity:
+          type: integer
+          nullable: true
+          description: Number of units currently in stock. Null when track_quantity is false.
+          example: 42
+        in_stock:
+          type: boolean
+          description: Whether the product is currently available to purchase.
+          example: true
+        backorder_allowed:
+          type: boolean
+          description: Whether customers can purchase when the product is out of stock.
+          example: false
+
+    Image:
+      type: object
+      required: [image_id, url, is_primary, position]
+      properties:
+        image_id:
+          type: string
+          description: Unique identifier for the image.
+          example: IMG-001
+        url:
+          type: string
+          description: Full URL to the image file.
+          example: https://cdn.example.com/products/headphones-front.jpg
+        alt:
+          type: string
+          nullable: true
+          description: Accessibility alt text for the image. Null if not set.
+          example: Front view of headphones
+        is_primary:
+          type: boolean
+          description: Whether this is the main product image. Exactly one image will have this set to true.
+          example: true
+        position:
+          type: integer
+          description: Zero-indexed sort order for displaying images. Lower values display first.
+          example: 0
+
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product attribute.
+          example: Color
+        value:
+          type: string
+          description: Value of the product attribute.
+          example: Midnight Black
+
+    SEO:
+      type: object
+      properties:
+        meta_title:
+          type: string
+          nullable: true
+          description: Custom page title for search engines. Null if not set; falls back to product name.
+        meta_description:
+          type: string
+          nullable: true
+          description: Meta description for search engines. Null if not set.
+        canonical_url:
+          type: string
+          nullable: true
+          description: Canonical URL to prevent duplicate content issues.

@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Markdown rendered in AI messages */
+.prose p { margin-bottom: 0.5rem; }
+.prose p:last-child { margin-bottom: 0; }
+.prose code {
+  background: #1e293b;
+  color: #a78bfa;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: ui-monospace, monospace;
+}
+.prose strong { color: #f1f5f9; }
+.prose ul { padding-left: 1.2rem; margin: 0.25rem 0; }
+.prose li { margin: 0.15rem 0; }

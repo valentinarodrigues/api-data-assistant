@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: Orders API
+  version: 1.0.0
+  description: Retrieve order lifecycle data including status, line items, shipping, and payment.
+
+paths:
+  /orders/{order_id}:
+    get:
+      summary: Get a single order
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+components:
+  schemas:
+    Order:
+      type: object
+      required: [order_id, created_at, status, customer, items, shipping, payment]
+      properties:
+        order_id:
+          type: string
+          description: Unique identifier for the order.
+          example: ORD-2024-00123
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the order was placed (ISO 8601, UTC).
+          example: "2024-01-15T10:30:00Z"
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled]
+          description: Current fulfillment status of the order.
+          example: shipped
+        customer:
+          $ref: "#/components/schemas/Customer"
+        items:
+          type: array
+          description: Line items included in the order.
+          items:
+            $ref: "#/components/schemas/LineItem"
+        shipping:
+          $ref: "#/components/schemas/Shipping"
+        payment:
+          $ref: "#/components/schemas/Payment"
+
+    Customer:
+      type: object
+      required: [customer_id, email, name]
+      properties:
+        customer_id:
+          type: string
+          description: Unique identifier for the customer.
+          example: CUST-456
+        email:
+          type: string
+          format: email
+          description: Email address of the customer.
+          example: john@example.com
+        name:
+          type: string
+          description: Full name of the customer.
+          example: John Doe
+        phone:
+          type: string
+          nullable: true
+          description: Contact phone number in E.164 format. Null if not provided at checkout.
+          example: "+15550123456"
+
+    LineItem:
+      type: object
+      required: [product_id, name, sku, quantity, unit_price]
+      properties:
+        product_id:
+          type: string
+          description: Unique identifier for the product variant.
+          example: PROD-789
+        name:
+          type: string
+          description: Display name of the product.
+          example: Wireless Headphones
+        sku:
+          type: string
+          description: Stock Keeping Unit code.
+          example: WH-BLK-001
+        quantity:
+          type: integer
+          minimum: 1
+          description: Number of units ordered for this line item.
+          example: 2
+        unit_price:
+          type: number
+          description: Price per unit before any discount, in the order currency.
+          example: 49.99
+        discount:
+          type: number
+          minimum: 0
+          description: Per-unit discount applied to this item. Zero if no discount.
+          example: 5.00
+
+    Shipping:
+      type: object
+      required: [address_line1, city, state, postal_code, country]
+      properties:
+        address_line1:
+          type: string
+          description: Primary street address line.
+          example: 123 Main St
+        address_line2:
+          type: string
+          nullable: true
+          description: Apartment, suite, or unit number. Null if not provided.
+          example: Apt 4B
+        city:
+          type: string
+          description: City for the shipping destination.
+          example: Austin
+        state:
+          type: string
+          description: State or province code (ISO 3166-2).
+          example: TX
+        postal_code:
+          type: string
+          description: ZIP or postal code.
+          example: "78701"
+        country:
+          type: string
+          description: Country code (ISO 3166-1 alpha-2).
+          example: US
+        carrier:
+          type: string
+          nullable: true
+          description: Shipping carrier name. Null until a shipping label is created.
+          example: FedEx
+        tracking_number:
+          type: string
+          nullable: true
+          description: Carrier-issued tracking number. Null until the order is shipped.
+          example: "794644823917"
+        estimated_delivery:
+          type: string
+          format: date
+          nullable: true
+          description: Expected delivery date (ISO 8601). Null until a label is created.
+          example: "2024-01-20"
+
+    Payment:
+      type: object
+      required: [method, subtotal, tax, shipping_cost, total, currency]
+      properties:
+        method:
+          type: string
+          description: Payment method used for the order.
+          enum: [credit_card, paypal, bank_transfer, store_credit]
+          example: credit_card
+        subtotal:
+          type: number
+          description: Sum of all item totals before tax and shipping.
+          example: 99.98
+        tax:
+          type: number
+          description: Total tax amount charged.
+          example: 8.25
+        shipping_cost:
+          type: number
+          description: Cost of shipping. Zero for free shipping orders.
+          example: 5.99
+        total:
+          type: number
+          description: Final amount charged — subtotal + tax + shipping_cost minus any order-level discounts.
+          example: 114.22
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: USD

@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CustomerAPIResponse",
+  "description": "Response from the /customers/{customer_id} endpoint",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Unique identifier for the customer"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary email address"
+    },
+    "email_verified": {
+      "type": "boolean",
+      "description": "Whether the email has been verified"
+    },
+    "name": {
+      "type": "object",
+      "properties": {
+        "first": { "type": "string" },
+        "last":  { "type": "string" },
+        "display": { "type": "string" }
+      },
+      "required": ["first", "last", "display"]
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "description": "Primary phone number in E.164 format"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "suspended"],
+      "description": "Account status"
+    },
+    "loyalty": {
+      "type": "object",
+      "description": "Loyalty programme details",
+      "properties": {
+        "tier":            { "type": "string", "enum": ["bronze", "silver", "gold", "platinum"] },
+        "points_balance":  { "type": "integer" },
+        "lifetime_spend":  { "type": "number" },
+        "member_since":    { "type": "string", "format": "date" }
+      },
+      "required": ["tier", "points_balance", "lifetime_spend", "member_since"]
+    },
+    "addresses": {
+      "type": "array",
+      "description": "Saved addresses for the customer",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address_id":    { "type": "string" },
+          "label":         { "type": "string" },
+          "is_default":    { "type": "boolean" },
+          "line1":         { "type": "string" },
+          "line2":         { "type": ["string", "null"] },
+          "city":          { "type": "string" },
+          "state":         { "type": "string" },
+          "postal_code":   { "type": "string" },
+          "country":       { "type": "string" }
+        },
+        "required": ["address_id", "is_default", "line1", "city", "state", "postal_code", "country"]
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "marketing_emails":  { "type": "boolean" },
+        "sms_notifications": { "type": "boolean" },
+        "language":          { "type": "string" },
+        "currency":          { "type": "string" }
+      },
+      "required": ["marketing_emails", "sms_notifications", "language", "currency"]
+    },
+    "stats": {
+      "type": "object",
+      "description": "Aggregate statistics for the customer",
+      "properties": {
+        "total_orders":       { "type": "integer" },
+        "total_spend":        { "type": "number" },
+        "average_order_value": { "type": "number" },
+        "last_order_at":      { "type": ["string", "null"], "format": "date-time" }
+      },
+      "required": ["total_orders", "total_spend", "average_order_value"]
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["customer_id", "email", "email_verified", "name", "status", "loyalty", "addresses", "preferences", "stats", "created_at", "updated_at"]
+}

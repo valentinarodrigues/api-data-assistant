@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderAPIResponse",
+  "description": "Response from the /orders/{order_id} endpoint",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "Unique identifier for the order"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the order was placed"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "processing", "shipped", "delivered", "cancelled"],
+      "description": "Current fulfillment status of the order"
+    },
+    "customer": {
+      "type": "object",
+      "description": "Information about the customer who placed the order",
+      "properties": {
+        "customer_id": { "type": "string" },
+        "email":       { "type": "string", "format": "email" },
+        "name":        { "type": "string" },
+        "phone":       { "type": ["string", "null"] }
+      },
+      "required": ["customer_id", "email", "name"]
+    },
+    "items": {
+      "type": "array",
+      "description": "Line items in the order",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": { "type": "string" },
+          "name":       { "type": "string" },
+          "sku":        { "type": "string" },
+          "quantity":   { "type": "integer", "minimum": 1 },
+          "unit_price": { "type": "number" },
+          "discount":   { "type": "number", "minimum": 0 }
+        },
+        "required": ["product_id", "name", "sku", "quantity", "unit_price"]
+      }
+    },
+    "shipping": {
+      "type": "object",
+      "description": "Shipping destination and carrier details",
+      "properties": {
+        "address_line1":      { "type": "string" },
+        "address_line2":      { "type": ["string", "null"] },
+        "city":               { "type": "string" },
+        "state":              { "type": "string" },
+        "postal_code":        { "type": "string" },
+        "country":            { "type": "string" },
+        "carrier":            { "type": ["string", "null"] },
+        "tracking_number":    { "type": ["string", "null"] },
+        "estimated_delivery": { "type": ["string", "null"], "format": "date" }
+      },
+      "required": ["address_line1", "city", "state", "postal_code", "country"]
+    },
+    "payment": {
+      "type": "object",
+      "description": "Payment method and cost breakdown",
+      "properties": {
+        "method":        { "type": "string" },
+        "subtotal":      { "type": "number" },
+        "tax":           { "type": "number" },
+        "shipping_cost": { "type": "number" },
+        "total":         { "type": "number" },
+        "currency":      { "type": "string" }
+      },
+      "required": ["method", "subtotal", "tax", "shipping_cost", "total", "currency"]
+    }
+  },
+  "required": ["order_id", "created_at", "status", "customer", "items", "shipping", "payment"]
+}

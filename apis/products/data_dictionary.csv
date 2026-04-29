@@ -1,0 +1,36 @@
+field_path,display_name,description,data_type,example,required,notes
+product_id,Product ID,Unique identifier for the product,string,PROD-00789,Yes,
+name,Product Name,Display name shown to customers,string,Wireless Noise-Cancelling Headphones,Yes,
+slug,URL Slug,URL-friendly version of the product name,string,wireless-noise-cancelling-headphones,Yes,Used in product page URLs
+description,Description,Full product description,string,"Experience superior sound...",Yes,May contain HTML markup
+short_description,Short Description,Brief summary shown in product listings,string,Premium ANC headphones with 30hr battery,No,Plain text; null if not set
+status,Status,Publication status of the product,string,active,Yes,"One of: active, draft, archived"
+brand.brand_id,Brand ID,Unique identifier for the brand,string,BRAND-12,Yes,
+brand.name,Brand Name,Display name of the brand,string,SoundMax,Yes,
+brand.logo_url,Brand Logo URL,URL to the brand's logo image,string,https://cdn.example.com/brands/soundmax.png,No,Null if brand has no logo on file
+categories[].category_id,Category ID,Unique identifier for the category,string,CAT-55,Yes,
+categories[].name,Category Name,Display name of the category,string,Headphones,Yes,
+categories[].slug,Category Slug,URL slug for the category,string,headphones,Yes,
+pricing.base_price,Base Price,Original price before any sale discount,number,149.99,Yes,In the currency specified by pricing.currency
+pricing.sale_price,Sale Price,Discounted price when product is on sale,number,99.99,No,Null if not on sale
+pricing.currency,Currency,ISO 4217 currency code,string,USD,Yes,
+pricing.on_sale,On Sale,Whether the product is currently discounted,boolean,true,Yes,
+pricing.tax_class,Tax Class,Tax classification applied to this product,string,standard,No,"e.g. standard, reduced, exempt"
+inventory.sku,SKU,Stock Keeping Unit code,string,WH-BLK-001,Yes,
+inventory.track_quantity,Track Quantity,Whether inventory quantity is being tracked,boolean,true,Yes,If false then quantity will be null
+inventory.quantity,Stock Quantity,Number of units currently in stock,integer,42,No,Null when track_quantity is false
+inventory.in_stock,In Stock,Whether the product is available to purchase,boolean,true,Yes,
+inventory.backorder_allowed,Backorder Allowed,Whether customers can purchase when out of stock,boolean,false,Yes,
+images[].image_id,Image ID,Unique identifier for the image,string,IMG-001,Yes,
+images[].url,Image URL,Full URL to the image,string,https://cdn.example.com/products/headphones-front.jpg,Yes,
+images[].alt,Alt Text,Accessibility alt text for the image,string,Front view of headphones,No,Null if not set
+images[].is_primary,Is Primary,Whether this is the main product image,boolean,true,Yes,Exactly one image will have is_primary=true
+images[].position,Position,Sort order for displaying images,integer,0,Yes,Zero-indexed; lower values display first
+attributes[].name,Attribute Name,Name of the product attribute,string,Color,No,
+attributes[].value,Attribute Value,Value of the product attribute,string,Midnight Black,No,
+tags,Tags,List of searchable tags,array,"[""wireless"", ""bluetooth"", ""anc""]",No,May be empty array
+seo.meta_title,SEO Title,Custom page title for search engines,string,Buy Wireless Headphones | SoundMax,No,Null if not set; falls back to product name
+seo.meta_description,SEO Description,Meta description for search engines,string,Shop the best wireless headphones...,No,Null if not set
+seo.canonical_url,Canonical URL,Canonical URL to avoid duplicate content,string,https://example.com/products/wireless-noise-cancelling-headphones,No,
+created_at,Created At,Timestamp when the product was created,datetime,2024-01-10T09:00:00Z,Yes,ISO 8601 (UTC)
+updated_at,Updated At,Timestamp of the most recent update,datetime,2024-03-22T14:30:00Z,Yes,ISO 8601 (UTC)

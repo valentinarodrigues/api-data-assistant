@@ -1,0 +1,22 @@
+{
+  "apis": [
+    {
+      "id": "orders",
+      "name": "Orders API",
+      "description": "Order lifecycle data — status, line items, shipping, payment",
+      "spec": "${ORDERS_API_SPEC}"
+    },
+    {
+      "id": "products",
+      "name": "Products API",
+      "description": "Product catalog — pricing, inventory, images, attributes",
+      "spec": "${PRODUCTS_API_SPEC}"
+    },
+    {
+      "id": "customers",
+      "name": "Customers API",
+      "description": "Customer profiles — loyalty, addresses, preferences, stats",
+      "spec": "${CUSTOMERS_API_SPEC}"
+    }
+  ]
+}

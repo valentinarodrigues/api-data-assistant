@@ -1,0 +1,29 @@
+field_path,display_name,description,data_type,example,required,notes
+order_id,Order ID,Unique identifier for the order,string,ORD-2024-00123,Yes,Alphanumeric; prefix ORD- followed by year and sequence
+created_at,Order Date,Timestamp when the order was placed,datetime,2024-01-15T10:30:00Z,Yes,ISO 8601 format (UTC)
+status,Order Status,Current fulfillment status of the order,string,shipped,Yes,"One of: pending, processing, shipped, delivered, cancelled"
+customer.customer_id,Customer ID,Unique identifier for the customer,string,CUST-456,Yes,
+customer.email,Customer Email,Email address of the customer,string,john@example.com,Yes,
+customer.name,Customer Name,Full legal name of the customer,string,John Doe,Yes,
+customer.phone,Customer Phone,Contact phone number,string,+1-555-0123,No,Null if not provided at checkout; E.164 format
+items[].product_id,Product ID,Unique identifier for the product variant,string,PROD-789,Yes,
+items[].name,Product Name,Display name of the product,string,Wireless Headphones,Yes,
+items[].sku,SKU,Stock Keeping Unit code,string,WH-BLK-001,Yes,
+items[].quantity,Quantity,Number of units ordered for this line item,integer,2,Yes,Always >= 1
+items[].unit_price,Unit Price,Price per single unit before discount,number,49.99,Yes,In the order currency
+items[].discount,Item Discount,Per-unit discount applied to this item,number,5.00,No,In currency units; 0 if no discount
+shipping.address_line1,Street Address,Primary street address line,string,123 Main St,Yes,
+shipping.address_line2,Address Line 2,Apartment/suite/unit number,string,Apt 4B,No,Null if not provided
+shipping.city,City,City for shipping destination,string,Austin,Yes,
+shipping.state,State/Province,State or province code,string,TX,Yes,ISO 3166-2 subdivision code
+shipping.postal_code,Postal Code,ZIP or postal code,string,78701,Yes,
+shipping.country,Country,Country code,string,US,Yes,ISO 3166-1 alpha-2
+shipping.carrier,Carrier,Shipping carrier name,string,FedEx,No,"e.g. FedEx, UPS, USPS; null until label created"
+shipping.tracking_number,Tracking Number,Carrier-issued tracking number,string,794644823917,No,Null until order is shipped
+shipping.estimated_delivery,Estimated Delivery,Expected delivery date,date,2024-01-20,No,ISO 8601 date; null until shipping label created
+payment.method,Payment Method,Payment method used for the order,string,credit_card,Yes,"credit_card, paypal, bank_transfer, store_credit"
+payment.subtotal,Subtotal,Sum of all item totals before tax and shipping,number,99.98,Yes,
+payment.tax,Tax Amount,Total tax charged,number,8.25,Yes,
+payment.shipping_cost,Shipping Cost,Cost of shipping,number,5.99,Yes,0 for free shipping orders
+payment.total,Order Total,Final amount charged to the customer,number,114.22,Yes,subtotal + tax + shipping_cost - any order-level discounts
+payment.currency,Currency,ISO 4217 currency code,string,USD,Yes,
